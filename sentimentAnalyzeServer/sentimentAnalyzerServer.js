@@ -32,11 +32,42 @@ app.get("/",(req,res)=>{
 
 app.get("/url/emotion", (req,res) => {
 
-    return res.send(getNLUInstance());
+    const analyzeParams = {
+        'url': req.query.url,
+        'features': {
+            'emotion': {
+                'limit': 3
+            }
+        }
+    };
+    const nlu = getNLUInstance();
+    nlu.analyze(analyzeParams)
+        .then(analysisResults => {
+            res.send(analysisResults.result.emotion.document.emotion);
+          })
+        .catch(err => {
+            console.log('error:', err);
+    });
+    return ;
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("RKRAO url sentiment for "+req.query.url);
+    const analyzeParams = {
+    'url': 'www.wsj.com/news/markets',
+    'features': {
+        'sentiment': {
+        }
+    }
+    };
+    const nlu = getNLUInstance();
+    nlu.analyze(analyzeParams)
+        .then(analysisResults => {
+        res.send(analysisResults.result.sentiment.document.label);
+        })
+        .catch(err => {
+            console.log('error:', err);
+    });
+    return ;   
 });
 
 app.get("/text/emotion", (req,res) => {

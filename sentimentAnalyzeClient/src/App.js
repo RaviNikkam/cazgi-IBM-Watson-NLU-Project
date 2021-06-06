@@ -45,7 +45,6 @@ class App extends React.Component {
     }
     ret = axios.get(url);
     ret.then((response)=>{
-
       //Include code here to check the sentiment and fomrat the data accordingly
 
       this.setState({sentimentOutput:response.data});
@@ -91,7 +90,7 @@ class App extends React.Component {
         <button className="btn-primary" onClick={this.sendForSentimentAnalysis}>Analyze Sentiment</button>
         <button className="btn-primary" onClick={this.sendForEmotionAnalysis}>Analyze Emotion</button>
         <br/>
-            {this.state.sentimentOutput}
+          {this.state.sentimentOutput}
       </div>
     );
     }

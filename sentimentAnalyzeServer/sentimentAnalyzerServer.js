@@ -53,16 +53,17 @@ app.get("/url/emotion", (req,res) => {
 
 app.get("/url/sentiment", (req,res) => {
     const analyzeParams = {
-    'url': 'www.wsj.com/news/markets',
+    'url': req.query.url,
     'features': {
         'sentiment': {
+            'limit': 1
         }
     }
     };
     const nlu = getNLUInstance();
     nlu.analyze(analyzeParams)
         .then(analysisResults => {
-        res.send(analysisResults.result.sentiment.document.label);
+            res.send(analysisResults.result.sentiment.document.label);
         })
         .catch(err => {
             console.log('error:', err);
@@ -71,11 +72,39 @@ app.get("/url/sentiment", (req,res) => {
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"RKRAO happy":"10","sad":"90"});
+    const analyzeParams = {
+    'features': {
+        'emotion': {}
+    },
+    'text': req.query.text
+    };
+    const nlu = getNLUInstance();
+        nlu.analyze(analyzeParams)
+            .then(analysisResults => 
+                {   
+                    res.send(analysisResults.result.emotion.document.emotion);
+                })
+                .catch(err => {
+                    console.log('error:', err);
+                });
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("RKRAO text sentiment for "+req.query.text);
+    const analyzeParams = {
+    'features': {
+        'sentiment': {}
+    },
+    'text': req.query.text
+    };
+    const nlu = getNLUInstance();
+        nlu.analyze(analyzeParams)
+            .then(analysisResults => 
+                {   
+                    res.send(analysisResults.result.sentiment.document.label);
+                })
+                .catch(err => {
+                    console.log('error:', err);
+                });
 });
 
 let server = app.listen(8080, () => {
